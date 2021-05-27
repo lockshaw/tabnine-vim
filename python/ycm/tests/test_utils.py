@@ -1,4 +1,4 @@
-# Copyright (C) 2011-2018 YouCompleteMe contributors
+# Copyright (C) 2011-2019 YouCompleteMe contributors
 #
 # This file is part of YouCompleteMe.
 #
@@ -15,52 +15,48 @@
 # You should have received a copy of the GNU General Public License
 # along with YouCompleteMe.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import unicode_literals
-from __future__ import print_function
-from __future__ import division
-from __future__ import absolute_import
-# Not installing aliases from python-future; it's unreliable and slow.
-from builtins import *  # noqa
-
 from collections import defaultdict, namedtuple
-from future.utils import iteritems, PY2
-from mock import DEFAULT, MagicMock, patch
+from unittest.mock import DEFAULT, MagicMock, patch
 from hamcrest import assert_that, equal_to
 import contextlib
 import functools
 import json
-import nose
+import pytest
 import os
 import re
 import sys
 
-from ycmd.utils import GetCurrentDirectory, ToBytes, ToUnicode
+from unittest import skipIf
+
+from ycmd.utils import GetCurrentDirectory, OnMac, OnWindows, ToUnicode
 
 
-BUFNR_REGEX = re.compile( '^bufnr\(\'(?P<buffer_filename>.+)\', ([01])\)$' )
-BUFWINNR_REGEX = re.compile( '^bufwinnr\((?P<buffer_number>[0-9]+)\)$' )
+BUFNR_REGEX = re.compile( '^bufnr\\(\'(?P<buffer_filename>.+)\', ([01])\\)$' )
+BUFWINNR_REGEX = re.compile( '^bufwinnr\\((?P<buffer_number>[0-9]+)\\)$' )
 BWIPEOUT_REGEX = re.compile(
   '^(?:silent! )bwipeout!? (?P<buffer_number>[0-9]+)$' )
 GETBUFVAR_REGEX = re.compile(
-  '^getbufvar\((?P<buffer_number>[0-9]+), "(?P<option>.+)"\)$' )
+  '^getbufvar\\((?P<buffer_number>[0-9]+), "(?P<option>.+)"\\)$' )
 MATCHADD_REGEX = re.compile(
-  '^matchadd\(\'(?P<group>.+)\', \'(?P<pattern>.+)\'\)$' )
-MATCHDELETE_REGEX = re.compile( '^matchdelete\((?P<id>\d+)\)$' )
+  '^matchadd\\(\'(?P<group>.+)\', \'(?P<pattern>.+)\', -1\\)$' )
+MATCHDELETE_REGEX = re.compile( '^matchdelete\\((?P<id>\\d+)\\)$' )
 OMNIFUNC_REGEX_FORMAT = (
-  '^{omnifunc_name}\((?P<findstart>[01]),[\'"](?P<base>.*)[\'"]\)$' )
-FNAMEESCAPE_REGEX = re.compile( '^fnameescape\(\'(?P<filepath>.+)\'\)$' )
+  '^{omnifunc_name}\\((?P<findstart>[01]),[\'"](?P<base>.*)[\'"]\\)$' )
+FNAMEESCAPE_REGEX = re.compile( '^fnameescape\\(\'(?P<filepath>.+)\'\\)$' )
+STRDISPLAYWIDTH_REGEX = re.compile(
+  '^strdisplaywidth\\( ?\'(?P<text>.+)\' ?\\)$' )
 SIGN_LIST_REGEX = re.compile(
-  "^silent! sign place buffer=(?P<bufnr>\d+)$" )
+  '^silent! sign place buffer=(?P<bufnr>\\d+)$' )
 SIGN_PLACE_REGEX = re.compile(
-  '^sign place (?P<id>\d+) name=(?P<name>\w+) line=(?P<line>\d+) '
-  'buffer=(?P<bufnr>\d+)$' )
+  '^sign place (?P<id>\\d+) name=(?P<name>\\w+) line=(?P<line>\\d+) '
+  'buffer=(?P<bufnr>\\d+)$' )
 SIGN_UNPLACE_REGEX = re.compile(
-  '^sign unplace (?P<id>\d+) buffer=(?P<bufnr>\d+)$' )
-REDIR_START_REGEX = re.compile( '^redir => (?P<variable>[\w:]+)$' )
+  '^sign unplace (?P<id>\\d+) buffer=(?P<bufnr>\\d+)$' )
+REDIR_START_REGEX = re.compile( '^redir => (?P<variable>[\\w:]+)$' )
 REDIR_END_REGEX = re.compile( '^redir END$' )
-EXISTS_REGEX = re.compile( '^exists\( \'(?P<option>[\w:]+)\' \)$' )
-LET_REGEX = re.compile( '^let (?P<option>[\w:]+) = (?P<value>.*)$' )
-HAS_PATCH_REGEX = re.compile( '^has\( \'patch(?P<patch>\d+)\' \)$' )
+EXISTS_REGEX = re.compile( '^exists\\( \'(?P<option>[\\w:]+)\' \\)$' )
+LET_REGEX = re.compile( '^let (?P<option>[\\w:]+) = (?P<value>.*)$' )
+HAS_PATCH_REGEX = re.compile( '^has\\( \'patch(?P<patch>\\d+)\' \\)$' )
 
 # One-and only instance of mocked Vim object. The first 'import vim' that is
 # executed binds the vim module to the instance of MagicMock that is created,
@@ -76,6 +72,7 @@ VIM_MATCHES_FOR_WINDOW = defaultdict( list )
 VIM_SIGNS = []
 
 VIM_OPTIONS = {
+  '&completeopt': b'',
   '&previewheight': 12,
   '&columns': 80,
   '&ruler': 0,
@@ -84,14 +81,17 @@ VIM_OPTIONS = {
   '&expandtab': 1
 }
 
-# This variable must be patched with a Version object for tests depending on the
-# Vim version. Example:
+Version = namedtuple( 'Version', [ 'major', 'minor', 'patch' ] )
+
+# This variable must be patched with a Version object for tests depending on a
+# recent Vim version. Example:
 #
-#   @patch( 'ycm.tests.test_utils.VIM_VERSION', Version( 7, 4, 1578 ) )
+#   @patch( 'ycm.tests.test_utils.VIM_VERSION', Version( 8, 1, 614 ) )
 #   def ThisTestDependsOnTheVimVersion_test():
 #     ...
 #
-VIM_VERSION = None
+# Default is the oldest supported version.
+VIM_VERSION = Version( 7, 4, 1578 )
 
 REDIR = {
   'status': False,
@@ -99,8 +99,8 @@ REDIR = {
   'output': ''
 }
 
-
-Version = namedtuple( 'Version', [ 'major', 'minor', 'patch' ] )
+WindowsAndMacOnly = skipIf( not OnWindows() or not OnMac(),
+                            'Windows and macOS only' )
 
 
 @contextlib.contextmanager
@@ -172,8 +172,15 @@ def _MockVimBufferEval( value ):
   if match:
     findstart = int( match.group( 'findstart' ) )
     base = match.group( 'base' )
-    value = current_buffer.omnifunc( findstart, base )
-    return value if findstart else ToBytesOnPY2( value )
+    return current_buffer.omnifunc( findstart, base )
+
+  return None
+
+
+def _MockVimWindowEval( value ):
+  if value == 'winnr("#")':
+    # For simplicity, we always assume there is no previous window.
+    return 0
 
   return None
 
@@ -185,7 +192,7 @@ def _MockVimOptionsEval( value ):
 
   if value == 'keys( g: )':
     global_options = {}
-    for key, value in iteritems( VIM_OPTIONS ):
+    for key, value in VIM_OPTIONS.items():
       if key.startswith( 'g:' ):
         global_options[ key[ 2: ] ] = value
     return global_options
@@ -266,6 +273,10 @@ def _MockVimEval( value ):
   if result is not None:
     return result
 
+  result = _MockVimWindowEval( value )
+  if result is not None:
+    return result
+
   result = _MockVimMatchEval( value )
   if result is not None:
     return result
@@ -281,7 +292,11 @@ def _MockVimEval( value ):
   if value == REDIR[ 'variable' ]:
     return REDIR[ 'output' ]
 
-  raise VimError( 'Unexpected evaluation: {0}'.format( value ) )
+  match = STRDISPLAYWIDTH_REGEX.search( value )
+  if match:
+    return len( match.group( 'text' ) )
+
+  raise VimError( f'Unexpected evaluation: { value }' )
 
 
 def _MockWipeoutBuffer( buffer_number ):
@@ -300,10 +315,12 @@ def _MockSignCommand( command ):
                           'Signs for foo:\n' )
     for sign in VIM_SIGNS:
       if sign.bufnr == bufnr:
-        REDIR[ 'output' ] += (
-          '    line={0}  id={1}  name={2}'.format( sign.line,
-                                                   sign.id,
-                                                   sign.name ) )
+        if VIM_VERSION >= Version( 8, 1, 614 ):
+          # 10 is the default priority.
+          line_output = '    line={}  id={}  name={} priority=10'
+        else:
+          line_output = '    line={}  id={}  name={}'
+        REDIR[ 'output' ] += line_output.format( sign.line, sign.id, sign.name )
     return True
 
   match = SIGN_PLACE_REGEX.search( command )
@@ -360,7 +377,15 @@ def _MockVimCommand( command ):
   return DEFAULT
 
 
-class VimBuffer( object ):
+def _MockVimOptions( option ):
+  result = VIM_OPTIONS.get( '&' + option )
+  if result is not None:
+    return result
+
+  return None
+
+
+class VimBuffer:
   """An object that looks like a vim.buffer object:
    - |name|     : full path of the buffer with symbolic links resolved;
    - |number|   : buffer number;
@@ -368,6 +393,7 @@ class VimBuffer( object ):
    - |filetype| : buffer filetype. Empty string if no filetype is set;
    - |modified| : True if the buffer has unsaved changes, False otherwise;
    - |bufhidden|: value of the 'bufhidden' option (see :h bufhidden);
+   - |vars|:      dict for buffer-local variables
    - |omnifunc| : omni completion function used by the buffer. Must be a Python
                   function that takes the same arguments and returns the same
                   values as a Vim completion function (:h complete-functions).
@@ -386,7 +412,8 @@ class VimBuffer( object ):
                       bufhidden = '',
                       omnifunc = None,
                       visual_start = None,
-                      visual_end = None ):
+                      visual_end = None,
+                      vars = {} ):
     self.name = os.path.realpath( name ) if name else ''
     self.number = number
     self.contents = contents
@@ -402,6 +429,7 @@ class VimBuffer( object ):
     }
     self.visual_start = visual_start
     self.visual_end = visual_end
+    self.vars = vars # should really be a vim-specific dict-like obj
 
 
   def __getitem__( self, index ):
@@ -427,10 +455,14 @@ class VimBuffer( object ):
       return self.visual_start
     if name == '>':
       return self.visual_end
-    raise ValueError( 'Unexpected mark: {name}'.format( name = name ) )
+    raise ValueError( f'Unexpected mark: { name }' )
 
 
-class VimBuffers( object ):
+  def __repr__( self ):
+    return f"VimBuffer( name = '{ self.name }', number = { self.number } )"
+
+
+class VimBuffers:
   """An object that looks like a vim.buffers object."""
 
   def __init__( self, buffers ):
@@ -455,7 +487,7 @@ class VimBuffers( object ):
     return self._buffers.pop( index )
 
 
-class VimWindow( object ):
+class VimWindow:
   """An object that looks like a vim.window object:
     - |number|: number of the window;
     - |buffer_object|: a VimBuffer object representing the buffer inside the
@@ -469,7 +501,13 @@ class VimWindow( object ):
     self.options = {}
 
 
-class VimWindows( object ):
+  def __repr__( self ):
+    return ( f'VimWindow( number = { self.number }, '
+                        f'buffer = { self.buffer }, '
+                        f'cursor = { self.cursor } )' )
+
+
+class VimWindows:
   """An object that looks like a vim.windows object."""
 
   def __init__( self, buffers, cursor ):
@@ -485,10 +523,10 @@ class VimWindows( object ):
 
   def __getitem__( self, number ):
     """Emulates vim.windows[ number ]"""
-    for window in self._windows:
-      if number == window.number:
-        return window
-    raise KeyError( number )
+    try:
+      return self._windows[ number ]
+    except IndexError:
+      raise IndexError( 'no such window' )
 
 
   def __iter__( self ):
@@ -496,7 +534,7 @@ class VimWindows( object ):
     return iter( self._windows )
 
 
-class VimCurrent( object ):
+class VimCurrent:
   """An object that looks like a vim.current object. |current_window| must be a
   VimWindow object."""
 
@@ -506,7 +544,7 @@ class VimCurrent( object ):
     self.line = self.buffer.contents[ current_window.cursor[ 0 ] - 1 ]
 
 
-class VimMatch( object ):
+class VimMatch:
 
   def __init__( self, group, pattern ):
     current_window = VIM_MOCK.current.window.number
@@ -520,8 +558,7 @@ class VimMatch( object ):
 
 
   def __repr__( self ):
-    return "VimMatch( group = '{0}', pattern = '{1}' )".format( self.group,
-                                                                self.pattern )
+    return f"VimMatch( group = '{ self.group }', pattern = '{ self.pattern }' )"
 
 
   def __getitem__( self, key ):
@@ -531,7 +568,7 @@ class VimMatch( object ):
       return self.id
 
 
-class VimSign( object ):
+class VimSign:
 
   def __init__( self, sign_id, line, name, bufnr ):
     self.id = sign_id
@@ -548,11 +585,8 @@ class VimSign( object ):
 
 
   def __repr__( self ):
-    return ( "VimSign( id = {0}, line = {1}, "
-                      "name = '{2}', bufnr = {3} )".format( self.id,
-                                                            self.line,
-                                                            self.name,
-                                                            self.bufnr ) )
+    return ( f"VimSign( id = { self.id }, line = { self.line }, "
+                      f"name = '{ self.name }', bufnr = { self.bufnr } )" )
 
 
   def __getitem__( self, key ):
@@ -581,7 +615,7 @@ def MockVimBuffers( buffers, window_buffers, cursor_position = ( 1, 1 ) ):
   with patch( 'vim.buffers', VimBuffers( buffers ) ):
     with patch( 'vim.windows', VimWindows( window_buffers,
                                            cursor_position ) ) as windows:
-      with patch( 'vim.current', VimCurrent( windows[ 1 ] ) ):
+      with patch( 'vim.current', VimCurrent( windows[ 0 ] ) ):
         yield VIM_MOCK
 
 
@@ -593,7 +627,7 @@ def MockVimModule():
   next test. That is:
 
     from ycm.tests.test_utils import MockVimModule
-    from mock import patch
+    from unittest.mock import patch
 
     # Do this once
     MockVimModule()
@@ -610,6 +644,8 @@ def MockVimModule():
   VIM_MOCK.command = MagicMock( side_effect = _MockVimCommand )
   VIM_MOCK.eval = MagicMock( side_effect = _MockVimEval )
   VIM_MOCK.error = VimError
+  VIM_MOCK.options = MagicMock()
+  VIM_MOCK.options.__getitem__.side_effect = _MockVimOptions
   sys.modules[ 'vim' ] = VIM_MOCK
 
   return VIM_MOCK
@@ -676,27 +712,9 @@ def ExpectedFailure( reason, *exception_matchers ):
           raise test_exception
 
         # Failed for the right reason
-        raise nose.SkipTest( reason )
+        pytest.skip( reason )
       else:
-        raise AssertionError( 'Test was expected to fail: {0}'.format(
-          reason ) )
+        raise AssertionError( f'Test was expected to fail: { reason }' )
     return Wrapper
 
   return decorator
-
-
-def ToBytesOnPY2( data ):
-  # To test the omnifunc, etc. returning strings, which can be of different
-  # types depending on python version, we use ToBytes on PY2 and just the native
-  # str on python3. This roughly matches what happens between py2 and py3
-  # versions within Vim.
-  if not PY2:
-    return data
-
-  if isinstance( data, list ):
-    return [ ToBytesOnPY2( item ) for item in data ]
-  if isinstance( data, dict ):
-    for item in data:
-      data[ item ] = ToBytesOnPY2( data[ item ] )
-    return data
-  return ToBytes( data )
