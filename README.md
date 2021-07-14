@@ -44,7 +44,7 @@ Learning from the past, focusing on the future, that’s the bedrock Tabnine is 
 
 Tabnine’s AI studies mountains of publicly available open source code and combines that with knowledge of your specific project and preferences creating code suggestions customized just for you. That saves you tons of keystrokes, and tons of time, all while keeping you aligned with best practices, and avoiding frustrating typos.
 
-#### **Pick the Plan that Works Best for You!**
+### **Pick the Plan that Works Best for You!**
 
 **Tabnine Basic**
 Tabnine’s Basic AI-powered code completion model is a fantastic time-saving tool for any developer. The Basic plan has plenty of free daily code completion suggestions to get you started, with no cost, no credit card, and no commitment.
@@ -52,14 +52,17 @@ Tabnine’s Basic AI-powered code completion model is a fantastic time-saving to
 **Tabnine Pro**
 Supercharge your AI code completion suggestions with our advanced ML model, unlock unlimited code suggestions, customize your experience, and get priority support. Experience the power of Tabnine Pro today!
 
-#### **Investing In Our Community**
+### **Easy Installation on Vim**
+
+See full instructions [here](https://www.tabnine.com/install/vim)
+
+### **Investing In Our Community**
 
 **FREE Tabnine Student Plan**
 We know that tuition, books, rent, and food can get crazy expensive, that’s why Tabnine helps support the community and the dev superstars of tomorrow with a 100% free Tabnine Student license with all our Pro perks renewable for as long as you are a student.
 
-## **Easy Installation on Vim**
+[Join the Tabnine Student Program for free](https://www.tabnine.com/students?utm_source=ide_marketplace&utm_medium=organic&utm_campaign=vim_marketplace)
 
-See full instructions [here](https://www.tabnine.com/install/vim)
 
 #### **FAQ**
 
@@ -82,8 +85,6 @@ Find out more about how we keep your code private [here](https://www.tabnine.com
 A quick click on **_Tabnine_** on your IDE status bar takes you directly to your **_Tabnine Hub_** where you can easily update and manage all your account options and customize your suggestion preferences.
 
 ### **Usage**
-
-After installation, navigate to the **_Tabnine Settings_** page (Open **_Settings_** from the Command Palette) and verify that Tabnine is successfully loaded (as shown in these [screenshots](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)).
 
 Tabnine is a textual autocomplete extension. When you type a specific string in your editor, you will be shown the Tabnine completion dialog box with suggestions for completing the code you’ve begun typing.
 
