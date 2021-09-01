@@ -11,7 +11,7 @@
 
 # Tabnine - AI Code Completion
 
-**tldr;** - jump to [installation section](#installation)
+**tldr;** jump to [installation section](#installation)
 
 Tabnine is an AI-powered code completion extension **trusted by millions of developers** around the world. Whether you’re just getting started as a developer or if you’ve been doing it for decades, Tabnine will help you code twice as fast with half the keystrokes – all in your favorite IDE.
 
