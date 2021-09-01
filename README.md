@@ -11,6 +11,8 @@
 
 # Tabnine - AI Code Completion
 
+**tl;dr** jump to [installation section](#installation)
+
 Tabnine is an AI-powered code completion extension **trusted by millions of developers** around the world. Whether you’re just getting started as a developer or if you’ve been doing it for decades, Tabnine will help you code twice as fast with half the keystrokes – all in your favorite IDE.
 
 ### **The Right Tool for The Job**
@@ -36,6 +38,7 @@ Powered by sophisticated **machine learning models** trained on billions of line
 |     **Go**     |   Objective C   | **JSON** |
 |   CSS / SCSS   |   **Angular**   |  Kotlin  |
 
+
 ### **Our Vision**
 
 Knowing that most of the code generated today has been created before begs the question - what if developers didn’t need to remember it, search for it, and type it again?
@@ -52,9 +55,31 @@ Tabnine’s Basic AI-powered code completion model is a fantastic time-saving to
 **Tabnine Pro**
 Supercharge your AI code completion suggestions with our advanced ML model, unlock unlimited code suggestions, customize your experience, and get priority support. Experience the power of Tabnine Pro today!
 
-### **Easy Installation on Vim**
+## **Installation**
 
-See full instructions [here](https://www.tabnine.com/install/vim)
+Tabnine plugs into the following completion engines:
+
+- [YouCompleteMe](#youcompleteme)
+- [deoplete.nvim](#deoplete.nvim)
+- [coc.nvim](#coc.nvim)
+
+##### Not using any of the above? 
+- If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
+- If you don't use any completion engine - it's recommended that you follow the [YouCompleteMe](#youcompleteme) installation instructions.
+
+### YouCompleteMe
+Tabnine supports YouCompleteMe through a fork.
+Follow the instructions here:
+https://github.com/tabnine/YouCompleteMe#installation
+
+### deoplete.nvim
+A community plugin is available here:
+https://github.com/tbodt/deoplete-tabnine
+
+### coc.nvim
+A community plugin is available here:
+https://github.com/neoclide/coc-tabnine
+
 
 ### **Investing In Our Community**
 
