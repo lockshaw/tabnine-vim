@@ -70,7 +70,7 @@ Tabnine plugs into the following completion engines:
 ### YouCompleteMe
 Tabnine supports YouCompleteMe through a fork.
 Follow the instructions here:
-https://github.com/tabnine/YouCompleteMe
+https://github.com/tabnine/YouCompleteMe#installation
 
 ### deoplete.nvim
 A community plugin is available here:
