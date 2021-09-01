@@ -36,6 +36,34 @@ Powered by sophisticated **machine learning models** trained on billions of line
 |     **Go**     |   Objective C   | **JSON** |
 |   CSS / SCSS   |   **Angular**   |  Kotlin  |
 
+
+## **Installation**
+
+Tabnine plugs into the following completion engines:
+
+- [YouCompleteMe](#youcompleteme)
+- [deoplete.nvim](#deoplete.nvim)
+- [coc.nvim](#coc.nvim)
+
+If your completion engine is not supported - you can list a request [here](http://).
+
+If you don't have any completion engine - it's recommended that you follow the YouCompleteMe installation instructions.
+
+### YouCompleteMe
+Tabnine supports YouCompleteMe through a fork.
+Follow the instructions here:
+https://github.com/tabnine/YouCompleteMe
+
+### deoplete.nvim
+A community plugin is available here:
+https://github.com/tbodt/deoplete-tabnine
+
+### coc.nvim
+A community plugin is available here:
+https://github.com/neoclide/coc-tabnine
+
+
+
 ### **Our Vision**
 
 Knowing that most of the code generated today has been created before begs the question - what if developers didn’t need to remember it, search for it, and type it again?
@@ -51,10 +79,6 @@ Tabnine’s Basic AI-powered code completion model is a fantastic time-saving to
 
 **Tabnine Pro**
 Supercharge your AI code completion suggestions with our advanced ML model, unlock unlimited code suggestions, customize your experience, and get priority support. Experience the power of Tabnine Pro today!
-
-### **Easy Installation on Vim**
-
-See full instructions [here](https://www.tabnine.com/install/vim)
 
 ### **Investing In Our Community**
 
