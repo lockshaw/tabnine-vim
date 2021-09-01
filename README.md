@@ -63,7 +63,7 @@ Tabnine plugs into the following completion engines:
 - [deoplete.nvim](#deoplete.nvim)
 - [coc.nvim](#coc.nvim)
 
-#### Not using any of the above? 
+##### Not using any of the above? 
 - If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
 - If you don't use any completion engine - it's recommended that you follow the [YouCompleteMe](#youcompleteme) installation instructions.
 
