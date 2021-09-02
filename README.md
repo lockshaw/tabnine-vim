@@ -59,9 +59,9 @@ Supercharge your AI code completion suggestions with our advanced ML model, unlo
 
 Tabnine plugs into the following completion engines:
 
-- [YouCompleteMe](#youcompleteme)
-- [deoplete.nvim](#deoplete.nvim)
-- [coc.nvim](#coc.nvim)
+- YouCompleteMe 
+- deoplete.nvim
+- coc.nvim
 
 ##### Not using any of the above? 
 - If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
