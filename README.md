@@ -63,6 +63,7 @@ Tabnine plugs into the following completion engines:
 - deoplete.nvim
 - coc.nvim
 - nvim-cmp
+- nvim-compe
 
 ##### Not using any of the above? 
 - If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
@@ -84,6 +85,10 @@ https://github.com/neoclide/coc-tabnine
 ### nvim-cmp
 A community plugin is available here:
 https://github.com/tzachar/cmp-tabnine
+
+### nvim-compe
+A community plugin is available here:
+https://github.com/tzachar/compe-tabnine
 
 
 ### **Investing In Our Community**
