@@ -64,6 +64,7 @@ Tabnine plugs into the following completion engines:
 - coc.nvim
 - nvim-cmp
 - nvim-compe
+- ddc.vim
 
 ##### Not using any of the above? 
 - If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
@@ -89,6 +90,11 @@ https://github.com/tzachar/cmp-tabnine
 ### nvim-compe
 A community plugin is available here:
 https://github.com/tzachar/compe-tabnine
+
+
+### ddc.vim
+A community plugin is available here:
+https://github.com/LumaKernel/ddc-tabnine
 
 
 ### **Investing In Our Community**
