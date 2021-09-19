@@ -62,6 +62,7 @@ Tabnine plugs into the following completion engines:
 - YouCompleteMe 
 - deoplete.nvim
 - coc.nvim
+- completion-nvim
 - nvim-cmp
 - nvim-compe
 - ddc.vim
@@ -82,6 +83,10 @@ https://github.com/tbodt/deoplete-tabnine
 ### coc.nvim
 A community plugin is available here:
 https://github.com/neoclide/coc-tabnine
+
+### completion-tabnine
+A community plugin is available here:
+https://github.com/aca/completion-tabnine
 
 ### nvim-cmp
 A community plugin is available here:
