@@ -82,7 +82,7 @@ https://github.com/neoclide/coc-tabnine
 
 ### completion-tabnine
 A community plugin is available here:
-https://github.com/aca/completion-tabnine
+https://github.com/aca/completion-tabnine#install
 
 ### nvim-cmp
 A community plugin is available here:
