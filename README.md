@@ -80,7 +80,7 @@ https://github.com/tabnine/YouCompleteMe#installation
 A community plugin is available here:
 https://github.com/neoclide/coc-tabnine
 
-### completion-tabnine
+### completion-nvim
 A community plugin is available here:
 https://github.com/aca/completion-tabnine#install
 
