@@ -60,12 +60,12 @@ Supercharge your AI code completion suggestions with our advanced ML model, unlo
 Tabnine plugs into the following completion engines:
 
 - YouCompleteMe 
-- deoplete.nvim
 - coc.nvim
 - completion-nvim
 - nvim-cmp
-- nvim-compe
+- deoplete.nvim
 - ddc.vim
+- nvim-compe
 
 ##### Not using any of the above? 
 - If your completion engine is not supported - file a [feature request](https://github.com/codota/tabnine-vim/issues/new).
@@ -75,10 +75,6 @@ Tabnine plugs into the following completion engines:
 Tabnine supports YouCompleteMe through a fork.
 Follow the instructions here:
 https://github.com/tabnine/YouCompleteMe#installation
-
-### deoplete.nvim
-A community plugin is available here:
-https://github.com/tbodt/deoplete-tabnine
 
 ### coc.nvim
 A community plugin is available here:
@@ -92,14 +88,17 @@ https://github.com/aca/completion-tabnine
 A community plugin is available here:
 https://github.com/tzachar/cmp-tabnine
 
-### nvim-compe
+### deoplete.nvim
 A community plugin is available here:
-https://github.com/tzachar/compe-tabnine
-
+https://github.com/tbodt/deoplete-tabnine
 
 ### ddc.vim
 A community plugin is available here:
 https://github.com/LumaKernel/ddc-tabnine
+
+### nvim-compe
+A community plugin is available here:
+https://github.com/tzachar/compe-tabnine
 
 
 ### **Investing In Our Community**
