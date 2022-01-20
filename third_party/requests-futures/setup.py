@@ -19,17 +19,16 @@ packages = [
 ]
 
 requires = [
-    'requests>=1.2.0'
+    'requests>=1.2.0',
+    'futures>=2.1.3; python_version<"3.2"'
 ]
-
-if sys.version_info < (3, 2):
-    requires.append('futures>=2.1.3')
 
 setup(
     name='requests-futures',
     version=requests_futures.__version__,
     description='Asynchronous Python HTTP for Humans.',
     long_description=open('README.rst').read(),
+    long_description_content_type='text/x-rst',
     author='Ross McFarland',
     author_email='rwmcfa1@neces.com',
     packages=packages,
@@ -37,20 +36,21 @@ setup(
     package_data={'requests_futures': ['LICENSE', 'README.rst']},
     include_package_data=True,
     install_requires=requires,
+    setup_requires=['setuptools>=38.6.1'],
     license='Apache License v2',
     url='https://github.com/ross/requests-futures',
     zip_safe=False,
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.1',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-    ),
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+    ],
+    options={'bdist_wheel': {'universal': True}},
 )

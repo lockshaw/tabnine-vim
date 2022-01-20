@@ -471,7 +471,7 @@ def StartThread( func, *args ):
   return thread
 
 
-class HashableDict( collections.Mapping ):
+class HashableDict( collections.abc.Mapping ):
   """An immutable dictionary that can be used in dictionary's keys. The
   dictionary must be JSON-encodable; in particular, all keys must be strings."""
 

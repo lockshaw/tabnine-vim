@@ -11,6 +11,9 @@ Encoded Data?
 Requests automatically decompresses gzip-encoded responses, and does
 its best to decode response content to unicode when possible.
 
+When either the `brotli <https://pypi.org/project/Brotli/>`_ or `brotlicffi <https://pypi.org/project/brotlicffi/>`_
+package is installed, requests also decodes Brotli-encoded responses.
+
 You can get direct access to the raw response (and even the socket),
 if needed as well.
 
@@ -19,7 +22,8 @@ Custom User-Agents?
 -------------------
 
 Requests allows you to easily override User-Agent strings, along with
-any other HTTP Header.
+any other HTTP Header. See `documentation about headers <https://requests.readthedocs.io/en/latest/user/quickstart/#custom-headers>`_.
+
 
 
 Why not Httplib2?
@@ -51,17 +55,17 @@ Chris Adams gave an excellent summary on
 Python 3 Support?
 -----------------
 
-Yes! Here's a list of Python platforms that are officially
-supported:
+Yes! Requests officially supports Python 2.7 & 3.6+ and PyPy.
 
-* Python 2.6
-* Python 2.7
-* Python 3.1
-* Python 3.2
-* Python 3.3
-* Python 3.4
-* PyPy 1.9
-* PyPy 2.2
+Python 2 Support?
+-----------------
+
+Yes! We understand that we have a large user base with varying needs. Through
+**at least** Requests 2.27.x, we will be providing continued support for Python
+2.7. However, this support is likely to end some time in 2022.
+
+It is *highly* recommended users migrate to Python 3.7+ now since Python
+2.7 is no longer receiving bug fixes or security updates as of January 1, 2020.
 
 What are "hostname doesn't match" errors?
 -----------------------------------------
@@ -70,7 +74,7 @@ These errors occur when :ref:`SSL certificate verification <verification>`
 fails to match the certificate the server responds with to the hostname
 Requests thinks it's contacting. If you're certain the server's SSL setup is
 correct (for example, because you can visit the site with your browser) and
-you're using Python 2.6 or 2.7, a possible explanation is that you need
+you're using Python 2.7, a possible explanation is that you need
 Server-Name-Indication.
 
 `Server-Name-Indication`_, or SNI, is an official extension to SSL where the

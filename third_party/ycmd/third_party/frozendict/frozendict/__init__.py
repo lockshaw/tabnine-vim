@@ -1,6 +1,6 @@
 import collections, operator
 
-class frozendict(collections.Mapping):
+class frozendict(collections.abc.Mapping):
 
     def __init__(self, *args, **kwargs):
         self.__dict = dict(*args, **kwargs)

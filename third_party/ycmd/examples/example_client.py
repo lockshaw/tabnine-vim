@@ -248,7 +248,7 @@ class YcmdHandle( object ):
     method = method.upper()
     request_uri = self._BuildUri( handler )
     args = [ 'http', '-v', method, request_uri ]
-    if isinstance( data, collections.Mapping ):
+    if isinstance( data, collections.abc.Mapping ):
       args.append( 'content-type:application/json' )
       data = ToUtf8Json( data )
 
@@ -330,7 +330,7 @@ def RecursiveEncodeUnicodeToUtf8( value ):
     return value.encode( 'utf8' )
   if isinstance( value, bytes ):
     return value
-  elif isinstance( value, collections.Mapping ):
+  elif isinstance( value, collections.abc.Mapping ):
     return dict( list(
       map( RecursiveEncodeUnicodeToUtf8, iter( value.items() ) ) ) )
   elif isinstance( value, collections.Iterable ):
