@@ -47,6 +47,7 @@ from ycm.client.base_request import BaseRequest, BuildRequestData
 from ycm.client.completer_available_request import SendCompleterAvailableRequest
 from ycm.client.command_request import SendCommandRequest
 from ycm.client.completion_request import CompletionRequest
+from ycm.client.configuration_request import ConfigurationRequest 
 from ycm.client.debug_info_request import ( SendDebugInfoRequest,
                                             FormatDebugInfoResponse )
 from ycm.client.omni_completion_request import OmniCompletionRequest
@@ -306,6 +307,11 @@ class YouCompleteMe( object ):
     self._latest_completion_request = CompletionRequest( request_data )
     self._latest_completion_request.Start()
 
+
+  def OpenTabnineHub( self ):
+    request_data = BuildRequestData()
+    request = ConfigurationRequest()
+    request.Start()
 
   def CompletionRequestReady( self ):
     return bool( self._latest_completion_request and
