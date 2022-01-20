@@ -863,6 +863,7 @@ function! s:SetUpCommands()
   command! YcmDiags call s:ShowDiagnostics()
   command! YcmShowDetailedDiagnostic call s:ShowDetailedDiagnostic()
   command! YcmForceCompileAndDiagnostics call s:ForceCompileAndDiagnostics()
+  command! TabnineHub call s:OpenTabnineHub()
 endfunction
 
 
@@ -953,6 +954,10 @@ endfunction
 
 function! s:ForceCompileAndDiagnostics()
   exec s:python_command "ycm_state.ForceCompileAndDiagnostics()"
+endfunction
+
+function! s:OpenTabnineHub()
+  exec s:python_command "ycm_state.OpenTabnineHub()"
 endfunction
 
 
