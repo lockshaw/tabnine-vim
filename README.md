@@ -11,7 +11,9 @@
 
 # Tabnine - AI Code Completion
 
-**tl;dr** jump to [installation section](#installation)
+**tl;dr** 
+- To install - jump to [installation section](#installation)
+- To open Tabnine Hub - use `:TabnineHub`
 
 **python3 users** - switch to [python3 branch](https://github.com/codota/tabnine-vim/tree/python3)
 
